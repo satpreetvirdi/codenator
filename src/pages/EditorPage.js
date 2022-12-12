@@ -3,16 +3,20 @@ import ACTIONS from '../Actions';
 import Client from '../components/Client'
 import Editor from '../components/Editor'
 import { initSocket } from '../socket';
-import { useLocation ,useNavigate , Navigate} from 'react-router-dom';
+import { useLocation, useNavigate, Navigate, useParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
-const EditorPage = ({roomId}) => {
+const EditorPage = () => {
 
   const socketRef = useRef(null);
   const location = useLocation();
-  const reactNavigator = useNavigate(); 
-  useEffect(()=>{
-    const init = async ()=>{
+  const { roomId } = useParams();
+  const [clients, setClients] = useState([]);
+
+  // console.log(roomId); 
+  const reactNavigator = useNavigate();
+  useEffect(() => {
+    const init = async () => {
       socketRef.current = await initSocket();
       socketRef.current.on('connect_error', (err) => handleErrors(err));
       socketRef.current.on('connect_failed', (err) => handleErrors(err));
@@ -21,22 +25,26 @@ const EditorPage = ({roomId}) => {
         console.log('socket error', e);
         toast.error('Socket connection failed, try again later.');
         reactNavigator('/');
-    }
+      }
 
-      socketRef.current.emit(ACTIONS.JOIN,{
+      socketRef.current.emit(ACTIONS.JOIN, {
         roomId,
-        username : location.state?.username,
-      }); 
+        username: location.state.username,
+      });
+      socketRef.current.on(ACTIONS.JOINED, ({ clients, username, socketId }) => {
+        if (username !== location.state.username) {
+          toast.success(`${username} joined the room`);
+          console.log(`${username} joined the room`);
+        }
+        setClients(clients);
+
+      })
+
     }
     init();
-  },[])
-  const [clients,setClients] = useState([
-    {socketId:1,username:'Satpreet'},
-    {socketId:2,username:'Preet'}
-  
-  ])
-  if(!location.state){
-    return  <Navigate to="/" />
+  }, [])
+  if (!location.state) {
+    return <Navigate to="/" />
   }
   return (
     <div className='mainWrap'>
@@ -48,8 +56,8 @@ const EditorPage = ({roomId}) => {
           <h3>Connected</h3>
           <div className='clientsList'>
             {
-              clients.map((client)=>(
-                <Client key={client.socketId} username={client.username}/>
+              clients.map((client) => (
+                <Client key={client.socketId} username={client.username} />
               ))
             }
           </div>

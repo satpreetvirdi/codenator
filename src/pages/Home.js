@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 const Home = () => {
     const  [roomId,setRoomId] = useState('');
-    const  [userName,setUserName] = useState('');
+    const  [username,setUserName] = useState('');
     const navigate = useNavigate();
 
     const createNewRoom = (e) =>{    
@@ -14,13 +14,13 @@ const Home = () => {
         toast.success('Created a New Room');
     };
     const joinRoom = ()=>{
-        if(!roomId || !userName){
+        if(!roomId || !username){
             toast.error('Username & Room Id is required ');
             return;
         }
         navigate(`/editor/${roomId}`,{
             state :{
-                userName,
+                username,
             }
         })
     }
@@ -38,7 +38,7 @@ const Home = () => {
                     <input className='inputBox' placeholder='Room ID' onChange={(e)=>setRoomId(e.target.value )} value={roomId}
                     onKeyUp={handleEnter}
                     ></input>
-                    <input className='inputBox' placeholder='User Name' onChange={(e)=>setUserName(e.target.value)} value={userName}
+                    <input className='inputBox' placeholder='User Name' onChange={(e)=>setUserName(e.target.value)} value={username}
                     onKeyUp={handleEnter}></input>
                     <button className='btn joinBtn' onClick={joinRoom}>Join</button>
                     <span className='createInfo'>
