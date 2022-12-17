@@ -7,5 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background :#1c1e29;
   overflow-x: hidden;
+  overflow-y:hidden;
 }
 

@@ -4,7 +4,6 @@
   height: 100vh;
   justify-content: center;
   color: #fff;
-  height: 100vh;
  /* overflow-x: hidden; */
 }
 .formWrapper{
@@ -120,7 +119,15 @@
   background-color: #282a36;
   color: white;
 }
-
+.CodeMirror{
+  min-height: calc(100vh - 20px);
+  font-size: 20px;
+  line-height: 1.6;
+  padding-top: 20px;
+}
+.btnEdit{
+  padding-bottom: 100vh;
+}
 
 
 

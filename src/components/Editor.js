@@ -10,9 +10,9 @@ const Editor = () => {
   const editorRef = useRef(null);
   useEffect(() => {
     async function init() {
-          editorRef.current  = Codemirror.fromTextArea(document.getElementById("realtimeEditor"), {
-        mode: { name: "javascript", json: true },
-        theme: "dracula",
+      editorRef.current = Codemirror.fromTextArea(document.getElementById('realtimeEditor'), {
+        mode: { name: 'javascript', json: true },
+        theme: 'dracula',
         autoCloseTags: true,
         autoCloseBrackets: true,
         lineNumbers: true,
