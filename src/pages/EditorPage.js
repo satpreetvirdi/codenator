@@ -12,7 +12,7 @@ const EditorPage = () => {
   const location = useLocation();
   const { roomId } = useParams();
   const [clients, setClients] = useState([]);
-
+  console.log(clients);
   // console.log(roomId); 
   const reactNavigator = useNavigate();
   useEffect(() => {
