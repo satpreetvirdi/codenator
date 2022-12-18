@@ -16,8 +16,8 @@ const EditorPage = () => {
   const location = useLocation();
   const { roomId } = useParams();
   const [clients, setClients] = useState([]);
-
-  // console.log(roomId);
+  console.log("clients 1", clients);
+  // console.log(roomId); 
   const reactNavigator = useNavigate();
   useEffect(() => {
     const init = async () => {
@@ -33,26 +33,31 @@ const EditorPage = () => {
 
       socketRef.current.emit(ACTIONS.JOIN, {
         roomId,
-        username: location.state.username,
+        username: location.state?.username,
       });
       socketRef.current.on(
         ACTIONS.JOINED,
         ({ clients, username, socketId }) => {
-          if (username !== location.state.username) {
+          if (username !== location.state?.username && socketId!==location.state.socketId) {
             toast.success(`${username} joined the room`);
             console.log(`${username} joined the room`);
+          // setClients(clients);
+
           }
+          
           setClients(clients);
-          // console.log(clients);
         }
       );
-      // Listening for disconneection
+      // Listening for disconnection
       socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
         toast.success(`${username} left the room`);
+        setClients((prev) => {
+          return prev.filter((client) => client.socketId !== socketId);
+        });
+       console.log("clients 3", clients);
+
       });
-      setClients((prev) => {
-        return prev.filter((client) => client.socketId != socketId);
-      });
+
     };
     init();
     // return  () =>{
@@ -60,11 +65,8 @@ const EditorPage = () => {
 
     //   socketRef.current.off(ACTIONS.JOINED);
     //   socketRef.current.off(ACTIONS.DISCONNECTED);
-      
-
     // };
-    
-  }, []);
+  },[]);
 
   if (!location.state) {
     return <Navigate to="/" />;
@@ -83,8 +85,10 @@ const EditorPage = () => {
             ))}
           </div>
         </div>
+        <div className="btnEdit">
         <button className="btn copyBtn">COPY ROOM ID</button>
         <button className="btn leaveBtn">Leave Room </button>
+        </div>
       </div>
       <div className="editorWrap">
         <Editor />
