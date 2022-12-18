@@ -43,6 +43,7 @@ const EditorPage = () => {
             console.log(`${username} joined the room`);
           }
           setClients(clients);
+          // console.log(clients);
         }
       );
       // Listening for disconneection
