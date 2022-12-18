@@ -9,10 +9,10 @@ import {
   Navigate,
   useParams,
 } from "react-router-dom";
-import { toast } from "react-hot-toast";
+import toast  from "react-hot-toast";
 
 const EditorPage = () => {
-  const socketRef = useRef(null);
+  const socketRef = useRef(false);
   const location = useLocation();
   const { roomId } = useParams();
   const [clients, setClients] = useState([]);
@@ -38,7 +38,7 @@ const EditorPage = () => {
       socketRef.current.on(
         ACTIONS.JOINED,
         ({ clients, username, socketId }) => {
-          if (username !== location.state?.username && socketId!==location.state.socketId) {
+          if (username !== location.state?.username ) {
             toast.success(`${username} joined the room`);
             console.log(`${username} joined the room`);
           // setClients(clients);
@@ -60,7 +60,7 @@ const EditorPage = () => {
 
     };
     init();
-    // return  () =>{
+    // return () =>{
     //   socketRef.current.disconnect();
 
     //   socketRef.current.off(ACTIONS.JOINED);
@@ -81,6 +81,7 @@ const EditorPage = () => {
           <h3>Connected</h3>
           <div className="clientsList">
             {clients.map((client) => (
+             
               <Client key={client.socketId} username={client.username} />
             ))}
           </div>
